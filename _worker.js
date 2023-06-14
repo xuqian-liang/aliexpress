@@ -1,11 +1,16 @@
-export default {
-  async fetch(request, env) {
-    let url = new URL(request.url);
-    if (url.pathname.startsWith('/')) {
-      url.hostname = 'www.aliexpress.us'
-      let new_request = new Request(url, request);
-      return fetch(new_request);
-    }
-    return env.ASSETS.fetch(request);
-  },
-};
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+
+/**
+ * Respond to the request
+ * @param {Request} request
+ */
+async function handleRequest(request) {
+  const url = new URL(request.url)
+  url.hostname = 'www.aliexpress.us'
+  let newRequest = new Request(url, request)
+  newRequest.headers.set('Host', 'www.aliexpress.us')
+  let response = await fetch(newRequest)
+  return response
+}
