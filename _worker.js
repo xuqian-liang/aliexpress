@@ -10,7 +10,7 @@ async function handleRequest(request) {
   const url = new URL(request.url)
   url.hostname = 'www.aliexpress.us'
   let newRequest = new Request(url, request)
-  newRequest.headers.set('Host', 'www.aliexpress.us')
+  newRequest.headers.set('Host', 'feedback.aliexpress.com')
   let response = await fetch(newRequest)
   return response
 }
