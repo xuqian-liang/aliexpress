@@ -1,16 +1,10 @@
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
+const { createServer } = require("http");
+const { createProxyServer } = require("http-proxy");
 
-/**
- * Respond to the request
- * @param {Request} request
- */
-async function handleRequest(request) {
-  const url = new URL(request.url)
-  url.hostname = 'www.aliexpress.us'
-  let newRequest = new Request(url, request)
-  newRequest.headers.set('Host', 'feedback.aliexpress.com')
-  let response = await fetch(newRequest)
-  return response
-}
+const proxy = createProxyServer({});
+
+createServer((req, res) => {
+  proxy.web(req, res, { target: "https://feedback.aliexpress.com" });
+}).listen(process.env.PORT || 3000, () => {
+  console.log("反向代理服务器已启动");
+});
